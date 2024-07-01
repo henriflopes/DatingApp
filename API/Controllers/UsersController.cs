@@ -3,29 +3,27 @@ using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Controllers;
+namespace API;
 
 [ApiController]
 [Route("api/[controller]")] // /api/users
-public class UsersController : ControllerBase
+public class UsersController(DataContext context) : ControllerBase
 {
-    private readonly DataContext _context;
-
-    public UsersController(DataContext context)
-    {
-        _context = context;
-    }
-
     [HttpGet]
     public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
     {
-        return await _context.Users.ToListAsync();
+        var users = await context.Users.ToListAsync();
+
+        return users;
     }
 
-    [HttpGet("{id}")] // /api/users/2
+    [HttpGet("{id:int}")]  // /api/users/2
     public async Task<ActionResult<AppUser>> GetUser(int id)
     {
-        return await _context.Users.FindAsync(id);
+        var user = await context.Users.FindAsync(id);
+
+        if (user == null) return NotFound();
+
+        return user;
     }
 }
-
