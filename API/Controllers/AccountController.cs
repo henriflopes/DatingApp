@@ -16,21 +16,23 @@ namespace API.Controllers
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
-            using var hmac = new HMACSHA512();
-            var user = new AppUser{
-                UserName = registerDto.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
-                PasswordSalt = hmac.Key
-            };
+            return Ok();
 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+            // using var hmac = new HMACSHA512();
+            // var user = new AppUser{
+            //     UserName = registerDto.Username.ToLower(),
+            //     PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password)),
+            //     PasswordSalt = hmac.Key
+            // };
 
-            return new UserDto
-            {
-                Username = registerDto.Username,
-                Token = tokenService.GetToken(user)
-            };
+            // context.Users.Add(user);
+            // await context.SaveChangesAsync();
+
+            // return new UserDto
+            // {
+            //     Username = registerDto.Username,
+            //     Token = tokenService.GetToken(user)
+            // };
         }
 
         [HttpPost("login")]
