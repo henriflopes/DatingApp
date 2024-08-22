@@ -1,9 +1,8 @@
-import { HttpClient, HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Member } from '../_models/member';
-import { AccountService } from './account.service';
-import { of, tap } from 'rxjs';
+import { asyncScheduler, map, scheduled, tap } from 'rxjs';
 
 
 @Injectable({
@@ -23,7 +22,7 @@ export class MembersService {
 
   getMember(username: string){
     const member = this.members().find( x => x.username === username);
-    if(member !== undefined) return of(member);
+    if(member !== undefined) return scheduled([member], asyncScheduler);
     
     return this.http.get<Member>(this.baseUrl + 'users/' + username);
   }
@@ -31,9 +30,11 @@ export class MembersService {
   updateMember(member: Member){
     return this.http.put(this.baseUrl + 'users', member).pipe(
       tap(() => {
-        this.members.update(members => members.map(m => m.username === member.username 
+          this.members.update(members => members.map(m => m.username === member.username 
           ? member : m))
       })
     );
   }
+
+ 
 }
