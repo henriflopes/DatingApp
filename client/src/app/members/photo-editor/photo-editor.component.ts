@@ -6,7 +6,6 @@ import { AccountService } from '../../_services/account.service';
 import { environment } from '../../../environments/environment';
 import { Photo } from '../../_models/photo';
 import { MembersService } from '../../_services/members.service';
-import { producerUpdatesAllowed } from '@angular/core/primitives/signals';
 
 @Component({
   selector: 'app-photo-editor',
