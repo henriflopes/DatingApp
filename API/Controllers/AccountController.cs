@@ -17,8 +17,6 @@ namespace API.Controllers
         {
             if (await UserExists(registerDto.Username)) return BadRequest("Username is taken");
 
-            using var hmac = new HMACSHA512();
-
             var user = mapper.Map<AppUser>(registerDto);
 
             user.UserName = registerDto.Username.ToLower();
@@ -29,7 +27,7 @@ namespace API.Controllers
 
             return new UserDto
             {
-                Username = registerDto.Username,
+                Username = user.UserName,
                 Token = await tokenService.GetToken(user),
                 KnownAs = user.KnownAs,
                 Gender = user.Gender
