@@ -28,7 +28,7 @@ public class LikesRepository(DataContext context, IMapper mapper) : ILikesReposi
             .ToListAsync();
     }
 
-    public async Task<UserLike> GetUserLike(int sourceUserId, int targetUserId)
+    public async Task<UserLike?> GetUserLike(int sourceUserId, int targetUserId)
     {
         return await context.Likes.FindAsync(sourceUserId, targetUserId);
     }
